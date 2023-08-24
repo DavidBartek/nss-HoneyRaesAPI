@@ -104,4 +104,12 @@ app.MapGet("/serviceTickets/{id}", (int id) =>
     return Results.Ok(serviceTicket);
 });
 
+app.MapPost("/serviceTickets", (ServiceTicket serviceTicket) =>
+{
+    // creates a new ID (later: our SQL database will do this for us)
+    serviceTicket.Id = serviceTickets.Count > 0 ?serviceTickets.Max(st => st.Id) + 1 : 1;
+    serviceTickets.Add(serviceTicket);
+    return serviceTicket;
+});
+
 app.Run();
