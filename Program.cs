@@ -112,4 +112,31 @@ app.MapPost("/serviceTickets", (ServiceTicket serviceTicket) =>
     return serviceTicket;
 });
 
+app.MapDelete("/serviceTickets/{id}", (int id) => 
+{
+    ServiceTicket serviceTicket = serviceTickets.FirstOrDefault(st => st.Id == id);
+    if (serviceTicket == null)
+    {
+        return Results.NotFound();
+    }
+    serviceTickets.RemoveAt(id - 1);
+    return Results.Ok();
+});
+
+app.MapPut("/serviceTickets/{id}", (int id, ServiceTicket serviceTicket) =>
+{
+    ServiceTicket ticketToUpdate = serviceTickets.FirstOrDefault(st => st.Id == id);
+    int ticketIndex = serviceTickets.IndexOf(ticketToUpdate);
+    if (ticketToUpdate == null)
+    {
+        return Results.NotFound();
+    }
+    if (id != serviceTicket.Id)
+    {
+        return Results.BadRequest();
+    }
+    serviceTickets[ticketIndex] = serviceTicket;
+    return Results.Ok();
+});
+
 app.Run();
